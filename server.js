@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", express.static(path.join(__dirname) + "/public"));
 
 // cors
-app.use(cors());
+app.use('*',cors());
 
 // Logger
 app.use(logger("dev"));
