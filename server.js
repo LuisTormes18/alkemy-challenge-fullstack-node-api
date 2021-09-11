@@ -17,18 +17,17 @@ const port = process.env.PORT || 4001;
 // middelwars
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", express.static(path.join(__dirname) + "/public"));
 
 // cors
-app.use('*',cors());
+app.use(cors());
 
 // Logger
 app.use(logger("dev"));
 
 // routes
 app.use("/api", require("./routes/routes"));
-app.use("*", (req,res)=>{
-	res.json({title:'Wellcome to Api!',msg:'url invalid!'})
+app.use("/", (req,res)=>{
+	res.json({msg:'Wellcome to Api!!'})
 });
 
 // run server
