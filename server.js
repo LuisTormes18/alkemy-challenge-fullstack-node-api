@@ -31,7 +31,7 @@ app.use("*", (req,res)=>{
 });
 
 // run server
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
   console.log("Server Runing on port " + port + "!");
 });
 
