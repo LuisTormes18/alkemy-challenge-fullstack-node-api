@@ -65,7 +65,10 @@ const Register = async (req, res = response) => {
             msg: "El correo electronico ya existe, Intente con uno nuevo",
           });
         } else {
-          throw error;
+           return res.json({
+        ok: false,
+        msg: "Error!!",
+      });
         }
       }
       // return user

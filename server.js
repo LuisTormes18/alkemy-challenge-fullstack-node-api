@@ -26,6 +26,9 @@ app.use(logger("dev"));
 
 // routes
 app.use("/api", require("./routes/routes"));
+app.use("*", (req,res)=>{
+	res.json({title:'Wellcome to Api!',msg:'url invalid!'})
+});
 
 // run server
 app.listen(port, () => {
@@ -40,6 +43,8 @@ db_connection.connect((error) => {
     console.log("Conexion Exitosa!");
   }
 });
-
+// db_connection.on('error',(error)=>{
+//     console.log("Error", error);
+// })
 
 module.exports = app;

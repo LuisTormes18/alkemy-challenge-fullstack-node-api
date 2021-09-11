@@ -8,7 +8,10 @@ const get = async (req, res) => {
     `select * from budget where userId = ${userId} `,
     (error, result) => {
       if (error) {
-        throw error;
+        return res.json({
+        ok: false,
+        msg: "Error!!",
+      });
       }
       return res.json({
         ok: true,
@@ -29,11 +32,10 @@ const add = async (req, res) => {
     values('${concept}', ${amount}, '${date}', ' ${type}', ${userId})`,
     (error, result) => {
       if (error) {
-        console.log(error);
         return res.json({
-          ok: true,
-          msg: "Ha ocurrido un error",
-        });
+        ok: false,
+        msg: "Error!!",
+      });
       }
       return res.json({
         ok: true,
@@ -54,11 +56,10 @@ const update = async (req, res) => {
     where id =${id} `,
     (error, result) => {
       if (error) {
-        console.log(error);
-        return res.json({
-          ok: true,
-          msg: "Ha ocurrido un error",
-        });
+         return res.json({
+        ok: false,
+        msg: "Error!!",
+      });
       }
       return res.json({
         ok: true,
@@ -74,11 +75,10 @@ const del = async (req, res) => {
     `delete from budget where id =${id} `,
     (error, result) => {
       if (error) {
-        console.log(error);
         return res.json({
-          ok: true,
-          msg: "Ha ocurrido un error",
-        });
+        ok: false,
+        msg: "Error!!",
+      });
       }
       return res.json({
         ok: true,
@@ -95,7 +95,10 @@ const getBudget = async (req, res) => {
     `select * from budget where userId = ${userId} `,
     (error, result) => {
       if (error) {
-        throw error;
+         return res.json({
+        ok: false,
+        msg: "Error!!",
+      });
       }
       // Calculando el presupuesto actual
       let total_egreso = 0;
