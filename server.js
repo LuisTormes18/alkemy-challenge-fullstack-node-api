@@ -5,6 +5,7 @@ const cors = require("cors");
 const path = require("path");
 
 const db_connection = require("./config/dbConnection");
+const openConnection = require("./config/openConnection");
 
 // init express
 const app = express();
@@ -35,14 +36,11 @@ app.listen(port,'0.0.0.0', () => {
   console.log("Server Runing on port " + port + "!");
 });
 
-// open connecion To db
-db_connection.connect((error) => {
-  if (error) {
-    console.log("Error de conexion!", error);
-  } else {
-    console.log("Conexion Exitosa!");
-  }
-});
-
+// open db
+openConnection(db_connection);
 
 module.exports = app;
+
+
+
+
