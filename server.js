@@ -43,8 +43,6 @@ db_connection.connect((error) => {
     console.log("Conexion Exitosa!");
   }
 });
-// db_connection.on('error',(error)=>{
-//     console.log("Error", error);
-// })
+
 
 module.exports = app;
