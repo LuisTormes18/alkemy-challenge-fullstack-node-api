@@ -45,11 +45,10 @@ const Register = async (req, res = response) => {
   const { name, email, password } = req.body;
 
   const hashPassword = hash(password);
-  let msg = "";
 
   // validacion si el usuario existe en la bse de datos
   const newUser = {
-    fullname: name,
+    name,
     email,
     password: hashPassword,
   };
