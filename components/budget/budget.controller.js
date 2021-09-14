@@ -2,10 +2,10 @@ const path = require("path");
 const db_connection = require("../../config/dbConnection");
 
 const get = async (req, res) => {
-  const { userId } = req.body;
+  const { id } = req.params;
 
   await db_connection.query(
-    `select * from budget where userId = ${userId} `,
+    `select * from budget where userId = ${id} `,
     (error, result) => {
       if (error) {
         return res.json({
@@ -23,9 +23,7 @@ const get = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { userId, concept, amount, type } = req.body;
-
-  const date = new Date();
+  const { userId, concept, amount, type, date } = req.body;
 
   await db_connection.query(
     `insert into budget (concept,amount,date,type,userId)
@@ -89,10 +87,10 @@ const del = async (req, res) => {
 };
 
 const getBudget = async (req, res) => {
-  const { userId } = req.body;
+  const { id } = req.params;
 
   await db_connection.query(
-    `select * from budget where userId = ${userId} `,
+    `select * from budget where userId = ${id} `,
     (error, result) => {
       if (error) {
          return res.json({

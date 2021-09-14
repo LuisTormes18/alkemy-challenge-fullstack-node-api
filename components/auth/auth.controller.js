@@ -27,7 +27,7 @@ const Login = async (req, res = response) => {
       });
     }
     const { id } = user[0].id;
-    const token = generarJWT({ id });
+    const token = generarJWT(id);
 
     return res.json({
       ok: true,
@@ -74,7 +74,7 @@ const Register = async (req, res = response) => {
       returnUser(email, (user) => {
         if (user) {
           const { id } = user[0].id;
-          const token = generarJWT({ id });
+          const token = generarJWT(id);
 
           return res.json({
             ok: true,
@@ -91,7 +91,9 @@ const Register = async (req, res = response) => {
 // Renovar Token Controller
 
 const UpdateToken = (req, res = response) => {
-  const token = generarJWT(req.body);
+
+  const {id } = req.body
+  const token = generarJWT(id);
 
   return res.json({
     ok: true,

@@ -8,10 +8,8 @@ const validateCampos = require("../../middlewares/validator-campos");
 
 // Listar los registros de un usuario
 router.get(
-  `/`,
+  `/:id`,
   [
-    check("userId", "El id de usuario es obligatorio").not().isEmpty(),
-    validateCampos,
     validateToken,
   ],
   get
@@ -21,10 +19,11 @@ router.get(
 router.post(
   `/add`,
   [
-    check("concept", "el nombre es obligatorio").not().isEmpty(),
-    check("amount", "El email es obligatorio").not().isEmpty(),
-    check("type", "La direccion es obligatoria").not().isEmpty(),
-    check("userId", "El id de usuario es obligatorio").not().isEmpty(),
+    check("concept", "The name is required").not().isEmpty(),
+    check("amount", "The amount is required").not().isEmpty(),
+    check("type", "El Tipo es obligatorio").not().isEmpty(),
+    check("date", "The date is required").not().isEmpty(),
+    check("userId", "The user id is required").not().isEmpty(),
     validateCampos,
     validateToken,
   ],
@@ -38,5 +37,5 @@ router.put(`/update/:id`, [validateToken], update);
 router.delete(`/delete/:id`, [validateToken], del);
 
 //Route para Traer el total
-router.get(`/getBudget`, [validateToken], getBudget);
+router.get(`/getBudget/:id`, [validateToken], getBudget);
 module.exports = router;

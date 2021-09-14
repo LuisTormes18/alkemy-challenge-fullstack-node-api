@@ -15,9 +15,9 @@ function validateToken(req, res, next) {
   }
 
   try {
-    const { id_user} = jwt.verify(token, process.env.SECRED_JWT_SEDD);
+    const { id} = jwt.verify(token, process.env.SECRED_JWT_SEDD);
 
-    req.body.id_user = id_user;
+    req.body.id = id;
    
     
   } catch (error) {
