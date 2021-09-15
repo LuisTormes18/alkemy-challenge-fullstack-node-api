@@ -1,6 +1,6 @@
-const db_connection = require("../../../config/dbConnection");
+const db_connection = require("../../config/dbConnection");
 
-const returnUser = async (email,callback) => {
+const getUserByEmail = async (email,callback) => {
  
  await db_connection.query(
     `select * from user where email = "${email}"`,
@@ -16,4 +16,4 @@ const returnUser = async (email,callback) => {
   );
 
 };
-module.exports = returnUser;
+module.exports = getUserByEmail;

@@ -2,18 +2,24 @@ const { check } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 
-const { get, add, update, del, getBudget } = require("./budget.controller");
-const validateToken = require("../../middlewares/validator-token");
-const validateCampos = require("../../middlewares/validator-campos");
+const {
+  getAllRecord,
+  getByRecordType,
+  getByTopRecord,
+  add,
+  update,
+  del,
+  getBudget,
+} = require("./budget.controller"); 
+const { validateToken, validateCampos } = require("../../middlewares");
 
-// Listar los registros de un usuario
-router.get(
-  `/:id`,
-  [
-    validateToken,
-  ],
-  get
-);
+router.get(`/:id`, [validateToken], getAllRecord);
+
+// get by top record
+router.get(`/get-top/:id/:top`, [validateToken], getByTopRecord);
+
+// get by ty record
+router.get(`/get-type/:id/:type`, [validateToken], getByRecordType);
 
 // Router budget add
 router.post(
@@ -33,9 +39,10 @@ router.post(
 //Route para actualizar
 router.put(`/update/:id`, [validateToken], update);
 
-//Route para Eliminar 
+//Route para Eliminar
 router.delete(`/delete/:id`, [validateToken], del);
 
 //Route para Traer el total
 router.get(`/getBudget/:id`, [validateToken], getBudget);
+
 module.exports = router;

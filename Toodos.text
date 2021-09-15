@@ -1,0 +1,1 @@
+1 arreglar el erro al ejecutar la funcion ExecuteQuery: el problema es que retorna una promesa

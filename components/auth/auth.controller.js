@@ -1,19 +1,12 @@
-const path = require("path");
 const bcrypt = require("bcryptjs");
-const { response } = require("express");
 
-const { generarJWT } = require("./utils/generarJWT");
-const hash = require("./utils/hash");
-const db_connection = require("../../config/dbConnection");
-const returnUser = require("./utils/returnUser");
+const { generarJWT, getUserByEmail, ExecuteQuery, hash } = require("../utils");
 
 // Login controller
-const Login = async (req, res = response) => {
+const Login = async (req, res) => {
   const { email, password } = req.body;
 
-  // validacion en la base de datos
-  returnUser(email, (user) => {
-    
+  getUserByEmail(email, (user) => {
     if (!user) {
       return res.json({
         ok: false,
@@ -36,63 +29,50 @@ const Login = async (req, res = response) => {
       token,
     });
   });
- 
 };
 
 // register controller
 
-const Register = async (req, res = response) => {
+const Register = async (req, res) => {
   const { name, email, password } = req.body;
 
   const hashPassword = hash(password);
 
-  // validacion si el usuario existe en la bse de datos
-  const newUser = {
-    name,
-    email,
-    password: hashPassword,
-  };
-
-  await db_connection.query(
-    `INSERT INTO user set ?`,
-    [newUser],
-    (error, result) => {
-      if (error) {
-        if (error.sqlMessage.includes("Duplicate entry")) {
-          return res.json({
-            ok: false,
-            msg: "El correo electronico ya existe, Intente con uno nuevo",
-          });
-        } else {
-           return res.json({
+  const { error } = await ExecuteQuery(`insert into user (name,email,password)
+  values('${name}', '${email}', '${hashPassword}')`);
+  
+  if (error) {
+    if (error.sqlMessage.includes("Duplicate entry")) {
+      return res.json({
+        ok: false,
+        msg: "El correo electronico ya existe, Intente con uno nuevo",
+      });
+    } else {
+      return res.json({
         ok: false,
         msg: "Error!!",
       });
-        }
-      }
-      // return user
-      returnUser(email, (user) => {
-        if (user) {
-          const { id } = user[0].id;
-          const token = generarJWT(id);
+    }
+  }
+  getUserByEmail(email, (user) => {
+    if (user) {
+      const { id } = user[0].id;
+      const token = generarJWT(id);
 
-          return res.json({
-            ok: true,
-            msg: "Register Sucessfull!",
-            user: user[0],
-            token,
-          });
-        }
+      return res.json({
+        ok: true,
+        msg: "Register Sucessfull!",
+        user: user[0],
+        token,
       });
     }
-  );
+  });
 };
 
 // Renovar Token Controller
 
-const UpdateToken = (req, res = response) => {
-
-  const {id } = req.body
+const UpdateToken = (req, res) => {
+  const { id } = req.body;
   const token = generarJWT(id);
 
   return res.json({

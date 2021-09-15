@@ -2,10 +2,8 @@ const { check } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 
-
 const { Login, Register, UpdateToken } = require("./auth.controller");
-const validateToken = require("../../middlewares/validator-token");
-const validateCampos = require("../../middlewares/validator-campos");
+const { validateToken, validateCampos } = require("../../middlewares");
 
 // Router Login
 router.post(
@@ -17,7 +15,6 @@ router.post(
   ],
   Login
 );
-
 // router register
 router.post(
   "/add",

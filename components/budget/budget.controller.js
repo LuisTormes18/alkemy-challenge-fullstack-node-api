@@ -1,123 +1,147 @@
-const path = require("path");
-const db_connection = require("../../config/dbConnection");
+const { ExecuteQuery } = require("../utils");
 
-const get = async (req, res) => {
+const getAllRecord = async (req, res) => {
   const { id } = req.params;
 
-  await db_connection.query(
-    `select * from budget where userId = ${id} `,
-    (error, result) => {
-      if (error) {
-        return res.json({
-        ok: false,
-        msg: "Error!!",
-      });
-      }
-      return res.json({
-        ok: true,
-        msg: "Sucessfull!",
-        data: result,
-      });
-    }
+  const { error, result } = await ExecuteQuery(`select * from budget`);
+  if (error) {
+    return res.json({
+      ok: false,
+      msg: "Error!!",
+    });
+  }
+  return res.json({
+    ok: true,
+    msg: "Sucessfull!",
+    data: result,
+  });
+};
+const getByTopRecord = async (req, res) => {
+  const { id, top } = req.params;
+
+  const { error, result } = await ExecuteQuery(
+    `select * from budget where userId = ${id} limit ${top} `
   );
+
+  if (error) {
+    return res.json({
+      ok: false,
+      msg: "Error!!",
+    });
+  }
+  return res.json({
+    ok: true,
+    msg: "Sucessfull!",
+    data: result,
+  });
 };
 
+const getByRecordType = async (req, res) => {
+  const { id, type } = req.params;
+  const { error, result } = await ExecuteQuery(
+    `select * from budget where userId = ${id} and type = '${type}'`
+  );
+
+  if (error) {
+    return res.json({
+      ok: false,
+      msg: "Error!!",
+    });
+  }
+  return res.json({
+    ok: true,
+    msg: "Sucessfull!",
+    data: result,
+  });
+};
 const add = async (req, res) => {
   const { userId, concept, amount, type, date } = req.body;
 
-  await db_connection.query(
-    `insert into budget (concept,amount,date,type,userId)
-    values('${concept}', ${amount}, '${date}', ' ${type}', ${userId})`,
-    (error, result) => {
-      if (error) {
-        return res.json({
-        ok: false,
-        msg: "Error!!",
-      });
-      }
-      return res.json({
-        ok: true,
-        msg: "Add Sucessfull!",
-      });
-    }
-  );
+  const { error } =
+    await ExecuteQuery(`insert into budget (concept,amount,date,type,userId)
+  values('${concept}', ${amount}, '${date}', '${type}', ${userId})`);
+
+  if (error) {
+    return res.json({
+      ok: false,
+      msg: "Error!!",
+    });
+  }
+  return res.json({
+    ok: true,
+    msg: "Add Sucessfull!",
+  });
 };
 
 const update = async (req, res) => {
   const { concept, amount, type } = req.body;
   const { id } = req.params;
+  const { error } =
+    await ExecuteQuery(`update budget set concept = '${concept}' ,amount = ${amount},
+    type = '${type}'  where id =${id} `);
 
-  await db_connection.query(
-    `update budget set concept = '${concept}' ,amount = ${amount},
-    type = '${type}'
-    
-    where id =${id} `,
-    (error, result) => {
-      if (error) {
-         return res.json({
-        ok: false,
-        msg: "Error!!",
-      });
-      }
-      return res.json({
-        ok: true,
-        msg: "update Sucessfull!",
-      });
-    }
-  );
+  if (error) {
+    return res.json({
+      ok: false,
+      msg: "Error!!",
+    });
+  }
+  return res.json({
+    ok: true,
+    msg: "update Sucessfull!",
+  });
 };
 
 const del = async (req, res) => {
   const { id } = req.params;
-  await db_connection.query(
-    `delete from budget where id =${id} `,
-    (error, result) => {
-      if (error) {
-        return res.json({
-        ok: false,
-        msg: "Error!!",
-      });
-      }
-      return res.json({
-        ok: true,
-        msg: "Delete Sucessfull!",
-      });
-    }
-  );
+  const { error } = await ExecuteQuery(`delete from budget where id =${id}`);
+  if (error) {
+    return res.json({
+      ok: false,
+      msg: "Error!!",
+    });
+  }
+  return res.json({
+    ok: true,
+    msg: "Delete Sucessfull!",
+  });
 };
 
 const getBudget = async (req, res) => {
   const { id } = req.params;
-
-  await db_connection.query(
-    `select * from budget where userId = ${id} `,
-    (error, result) => {
-      if (error) {
-         return res.json({
-        ok: false,
-        msg: "Error!!",
-      });
-      }
-      // Calculando el presupuesto actual
-      let total_egreso = 0;
-      let total_ingreso = 0;
-      result.map((element) => {
-
-        console.log(element.type)
-        
-        element.type.includes("Egreso")
-          ? (total_egreso = total_egreso + element.amount)
-          : (total_ingreso = total_ingreso + element.amount);
-      });
-      const total = total_ingreso - total_egreso;
-
-      return res.json({
-        ok: true,
-        msg: "Sucessfull!",
-        data: { total_egreso, total_ingreso, total },
-      });
-    }
+  const { error, result } = await ExecuteQuery(
+    `select * from budget where userId = ${id}`
   );
+
+  if (error) {
+    return res.json({
+      ok: false,
+      msg: "Error!!",
+    });
+  }
+  // Calculando el presupuesto actual
+  let total_egreso = 0;
+  let total_ingreso = 0;
+  result.map((element) => {
+       element.type.includes("Egress")
+      ? (total_egreso = total_egreso + element.amount)
+      : (total_ingreso = total_ingreso + element.amount);
+  });
+  const total = total_ingreso - total_egreso;
+
+  return res.json({
+    ok: true,
+    msg: "Sucessfull!",
+    data: { total_egreso, total_ingreso, total },
+  });
 };
 
-module.exports = { get, add, update, del, getBudget };
+module.exports = {
+  getAllRecord,
+  getByRecordType,
+  getByTopRecord,
+  add,
+  update,
+  del,
+  getBudget,
+};

@@ -6,7 +6,7 @@ function validateToken(req, res, next) {
   if (!token) {
     return res.json({
       ok: false,
-      msg: "Es Nesesario el Token!",
+      msg: "Token id required!",
     });
   }
 

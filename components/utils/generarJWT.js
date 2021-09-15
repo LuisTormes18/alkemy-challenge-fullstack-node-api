@@ -14,6 +14,5 @@ function generarJWT(id ) {
   return token;
 }
 
-module.exports = {
-  generarJWT,
-};
+module.exports = generarJWT
+
