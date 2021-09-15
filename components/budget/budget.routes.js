@@ -27,7 +27,7 @@ router.post(
   [
     check("concept", "The name is required").not().isEmpty(),
     check("amount", "The amount is required").not().isEmpty(),
-    check("type", "El Tipo es obligatorio").not().isEmpty(),
+    check("type", "Type is required").not().isEmpty(),
     check("date", "The date is required").not().isEmpty(),
     check("userId", "The user id is required").not().isEmpty(),
     validateCampos,

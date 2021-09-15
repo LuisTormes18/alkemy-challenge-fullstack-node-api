@@ -17,6 +17,6 @@ const desarrollo = {
     user: "root",
     password: "",	
 }
-const db_connection = mysql.createConnection(desarrollo);
+const db_connection = mysql.createConnection(production);
 
 module.exports = db_connection;
