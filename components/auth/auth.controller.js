@@ -7,16 +7,17 @@ const Login = async (req, res) => {
   const { email, password } = req.body;
 
   getUserByEmail(email, (user) => {
+    
     if (!user) {
       return res.json({
         ok: false,
-        msg: "usuario y/o contraseña incorrecta",
+        msg: "Incorrect username and/or password",
       });
     }
     if (!bcrypt.compareSync(password, user[0].password)) {
       return res.json({
         ok: false,
-        msg: "contraseña incorrecta",
+        msg: "Incorrect username and/or password!",
       });
     }
     const { id } = user[0].id;
@@ -45,7 +46,7 @@ const Register = async (req, res) => {
     if (error.sqlMessage.includes("Duplicate entry")) {
       return res.json({
         ok: false,
-        msg: "El correo electronico ya existe, Intente con uno nuevo",
+        msg: "Email already exists, please try a new one!",
       });
     } else {
       return res.json({
@@ -61,7 +62,7 @@ const Register = async (req, res) => {
 
       return res.json({
         ok: true,
-        msg: "Register Sucessfull!",
+        msg: "Register Sucessful!",
         user: user[0],
         token,
       });
@@ -69,7 +70,7 @@ const Register = async (req, res) => {
   });
 };
 
-// Renovar Token Controller
+// Renovar Token 
 
 const UpdateToken = (req, res) => {
   const { id } = req.body;
@@ -77,7 +78,7 @@ const UpdateToken = (req, res) => {
 
   return res.json({
     ok: true,
-    msg: "Update Token Sucessfull!",
+    msg: "Update Token Sucessful!",
     token,
   });
 };
